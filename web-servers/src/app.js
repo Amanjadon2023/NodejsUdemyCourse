@@ -27,11 +27,15 @@ app.get('/help',(req,res)=>{
         'name':'aman jadon'
     })
 })
+
 app.get('/weather',(req,res)=>{
     res.send({
         location:'Mathura',
         age:'23 degree Celcius'
     })
+})
+app.get('/weather-report',(req,res)=>{
+    res.send('todays weather is clear')
 })
 app.get('/help',(req,res)=>{
     res.send('help page')

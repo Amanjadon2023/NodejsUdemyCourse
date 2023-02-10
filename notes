@@ -1,0 +1,1 @@
+we append the data using appendFileSync function present in file system

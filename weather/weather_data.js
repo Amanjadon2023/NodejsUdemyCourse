@@ -1,6 +1,6 @@
 const { default: chalk } = require("chalk");
 const request = require("request")
-const weatherData = ({cityName,callback}) => {
+const weatherData = (cityName,callback) => {
     console.log(cityName)
     const url = `http://api.weatherstack.com/current?access_key=87d6e68439275958f5f972e55c1fa943&query=${cityName}&units=f`
     request({ url: url, json: true }, (err, res) => {

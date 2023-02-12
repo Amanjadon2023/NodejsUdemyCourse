@@ -21,20 +21,19 @@ const pathViewsDirectory = path.join(__dirname, '../templates/views')
 app.set('views', pathViewsDirectory)
 app.get('', (req, res) => {
     res.render('index', {
-        'title': 'weather',
+        'title': 'Weather',
         'name': 'aman jadon'
     })
 })
 app.get('/help', (req, res) => {
     res.render('help', {
-        'title': 'how can i help you',
+        'title': 'Help',
         'name': 'aman jadon',
-        'help': "hey helper"
     })
 })
 app.get('/about', (req, res) => {
     res.render('about', {
-        'title': 'about me',
+        'title': 'About me',
         'name': 'aman jadon'
     })
 })
@@ -46,6 +45,7 @@ app.get('/help/*', (req, res) => {
 
 app.get('/weather', (req, res) => {
     const city = req.query.address
+    console.log(city)
     if (!req.query.address) {
         return res.send({
             error: 'plese provide address to get the weather'

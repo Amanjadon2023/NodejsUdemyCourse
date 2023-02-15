@@ -2,7 +2,7 @@ const { default: chalk } = require("chalk");
 const request = require("request")
 const weatherData = (cityName,callback) => {
     console.log(cityName)
-    const url = `http://api.weatherstack.com/current?access_key=87d6e68439275958f5f972e55c1fa943&query=${cityName}&units=f`
+    const url = `http://api.weatherstack.com/current?access_key=87d6e68439275958f5f972e55c1fa943&query=${cityName}&units=m`
     request({ url: url, json: true }, (err, res) => {
         const parsedData = res.body;
         // console.log(parsedData)
@@ -15,7 +15,7 @@ const weatherData = (cityName,callback) => {
         else {
             // const temp = parsedData.body.current.temperature
             const dataObj= {
-                locations:parsedData.location.timezone_id,
+                locations:parsedData.location.name,
                 temperature:parsedData.current.temperature,
                 weather:parsedData.current.weather_descriptions[0],
             }

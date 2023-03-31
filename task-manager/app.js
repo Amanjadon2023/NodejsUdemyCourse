@@ -1,4 +1,5 @@
 const { MongoClient, ObjectId } = require('mongodb')
+// C:\Users\DELL\mongodb\bin\mongod.exe --dbpath=C:\Users\DELL\mongodb-data 
 async function main() {
     console.log('app');
   /**

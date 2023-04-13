@@ -1,5 +1,11 @@
 const mongoose = require('mongoose')
 const bcrypt=require('bcryptjs')
+var jwt = require('jsonwebtoken');
+
+const validateEmail = function(email) {
+  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email)
+};
 const userSchema=new mongoose.Schema({
   name: {
     type: String,
@@ -7,7 +13,16 @@ const userSchema=new mongoose.Schema({
   age: {
     type: Number,
   },
-  password: {
+  email: {
+    type: String,
+    trim: true,
+    unique:true,
+    lowercase: true,
+    required: 'Email address is required',
+    validate: [validateEmail, 'Please fill a valid email address'],
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+}
+  ,password: {
     type: String,
     required: true,
     validate: {
@@ -22,10 +37,35 @@ const userSchema=new mongoose.Schema({
       }
     },
   },
+  tokens:[{token:{type:String,required:true}}]
 })
+userSchema.methods.generateAuthToken=async function(){
+  let user=this;
+  console.log(user);
+  const token = jwt.sign({ _id:( user._id).toString() }, 'thisismyfirsttoken');
+  console.log(token,"token");
+  user.tokens= user.tokens.concat({token})
+ await user.save()
+ console.log(user);
+  return token;
+}
+userSchema.statics.findByCredentials=async(email,password)=>{
+  // console.log("token");
+  const user=await User.findOne({email});
+  if(!user){
+    throw new Error('user does not exist');
+  }
+  const hashPass=await bcrypt.hash(password,8);
+  const isMatch=await bcrypt.compare(password,hashPass)
+  if(!isMatch){
+    throw new Error('password is not correct');
+  }return user;
+}
 userSchema.pre('save',async function(next){
   const user=this;
+  console.log('object');
   if(user.isModified('password')){
+    console.log('hi');
     const hashedPass=await bcrypt.hash(user.password,8);
     user.password=hashedPass
   }

@@ -11,14 +11,27 @@ router.get('/users',async(req,res)=>{
 router.post('/users',async(req,res)=>{
     try{
         const user=new User(req.body)
-        const data=await user.save();
-        res.send(data)
+        const token=await user.generateAuthToken();
+        console.log(token,"**");
+        res.status(200).send({user,token});
     }
     catch(e){
+        console.log('error');
         res.send(e)
     }
 })
-
+router.post('/users/logIn',async(req,res)=>{
+    try {
+        const data=await User.findByCredentials(req.body.email,req.body.password);
+        const token=await data.generateAuthToken();
+        // data.save()
+        console.log(token);
+        res.status(200).send({data,token});
+    } catch (error) {
+        // console.log(error);
+        res.status(400).send({error:"unable to logIn"})
+    }
+})
 router.patch('/users',async(req,res)=>{
     try{
         //ist way
@@ -56,6 +69,7 @@ router.get('/users/:id',async(req,res)=>{
         res.send({error:e})
     }
 })
+
 router.delete('/users/:id',async(req,res)=>{
     try{
         const data=await User.deleteOne({_id:req.params.id})

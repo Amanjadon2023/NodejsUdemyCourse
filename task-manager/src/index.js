@@ -8,14 +8,22 @@ const taskRouter = require('./routers/task');
 app.use(userRouter)
 app.use(taskRouter)
 const bcrypt = require('bcryptjs');
-const fun=async()=>{
-    const pass='aman'
- const hashedPass=await bcrypt.hash(pass,8);
- console.log(pass,'****',hashedPass);
- const isMatch=await bcrypt.compare('11111111','$2a$08$/Ml4pGeSKGizzkvnpOtPa.dinANPSUKlPF3qO8lZ1ctUhS.4RI6EO')
- console.log(isMatch);
+var jwt = require('jsonwebtoken');
+// const fun=async()=>{
+//     const pass='aman'
+//  const hashedPass=await bcrypt.hash(pass,8);
+//  console.log(pass,'****',hashedPass);
+//  const isMatch=await bcrypt.compare('11111111','$2a$08$Qr62LMUUKXsWgOWMfvZSC.yCDxR7d6bULh1ZCgfw.QyLFewpW4PUG')
+//  console.log(isMatch);
+// }
+// fun('aman');
+const myFun=()=>{
+    var token = jwt.sign({ _id: '12343201023983290dndjd' }, 'thisismyfirsttoken');
+    console.log(token);
+    const data=jwt.verify(token,'thisismyfirsttoken')
+    console.log(data);
 }
-fun('aman');
+// myFun()
 app.listen('3000',()=>{
     console.log('server is listening at 3000');
-}) 
+})

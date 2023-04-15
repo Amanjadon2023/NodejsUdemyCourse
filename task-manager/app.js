@@ -6,7 +6,8 @@ async function main() {
    * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
    * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
    */
-  const uri = 'mongodb://127.0.0.1:27017'
+  // const uri = 'mongodb://127.0.0.1:27017'
+  const uri='mongodb+srv://AmanJadon:Gemini%4012345@cluster0.ud7w084.mongodb.net/task-manager'
 //   const id = new ObjectId()
   //  console.log(id.id+"");
   const client = new MongoClient(uri)
@@ -56,6 +57,7 @@ async function main() {
     // Make the appropriate DB calls
     // console.log('connection established',dclist.namespace);
     // await  listDatabases(client);
+    
   } catch (e) {
     console.error(e)
   } finally {

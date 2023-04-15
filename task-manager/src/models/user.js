@@ -40,13 +40,10 @@ const userSchema=new mongoose.Schema({
   tokens:[{token:{type:String,required:true}}]
 })
 userSchema.methods.generateAuthToken=async function(){
-  let user=this;
-  console.log(user);
+  const user=this;
   const token = jwt.sign({ _id:( user._id).toString() }, 'thisismyfirsttoken');
-  console.log(token,"token");
   user.tokens= user.tokens.concat({token})
- await user.save()
- console.log(user);
+  user.save()
   return token;
 }
 userSchema.statics.findByCredentials=async(email,password)=>{
@@ -63,9 +60,7 @@ userSchema.statics.findByCredentials=async(email,password)=>{
 }
 userSchema.pre('save',async function(next){
   const user=this;
-  console.log('object');
   if(user.isModified('password')){
-    console.log('hi');
     const hashedPass=await bcrypt.hash(user.password,8);
     user.password=hashedPass
   }

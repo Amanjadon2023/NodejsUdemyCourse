@@ -7,7 +7,7 @@ const auth=async(req,res,next)=>{
         const decoded=jwt.verify(token, 'thisismyfirsttoken')
         const user=await User.findOne({_id:decoded._id})
         req.user=user;
-        console.log(req);
+        req.token=token;
         next()
     } catch (error) {
         res.status(401).send("please authenticate!")

@@ -12,11 +12,15 @@ router.get('/users', async (req, res) => {
     })
 })
 router.get('/users/me', auth, async (req, res) => {
-    try {
+    const a = req.user.tokens.filter((token) => {
+        return token.token === req.token
+    })
+    console.log(a)
+    if (a.length !== 0)
         res.send(req.user)
-    } catch (error) {
-        res.send({ 'error': error })
-    }
+    else
+        res.send('please authenticate')
+
 })
 router.post('/users', async (req, res) => {
     try {
@@ -29,12 +33,21 @@ router.post('/users', async (req, res) => {
         res.status(400).send({ "error": "not able to add user" })
     }
 })
+router.post('/users/logOut', auth, async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token
+        })
+        await req.user.save();
+        res.status(200).send('user log out')
+    } catch (error) {
+        res.status(200).send('problem in logging out')
+    }
+})
 router.post('/users/logIn', async (req, res) => {
     try {
         const data = await User.findByCredentials(req.body.email, req.body.password);
         const token = await data.generateAuthToken();
-        // data.save()
-        console.log(token);
         res.status(200).send({ data, token });
     } catch (error) {
         // console.log(error);
